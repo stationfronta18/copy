@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Google Sheets API 測試</title>
+    <title>Google Sheets API 測試1.0.1</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -14,15 +14,19 @@
         const SPREADSHEET_ID = '1ga9f117SjOxHvNQ9Cx9x1bwx-r3GRVa-ipDSOYjVDm8';
         const range = '工作表1!A1:C10';  // 這裡設定你要讀取的範圍
 
-        axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`)
+        axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
             .then(response => {
                 const data = response.data.values;
                 const dataElement = document.getElementById('data');
-                data.forEach(row => {
-                    const rowElement = document.createElement('div');
-                    rowElement.textContent = row.join(', ');
-                    dataElement.appendChild(rowElement);
-                });
+                if (data) {
+                    data.forEach(row => {
+                        const rowElement = document.createElement('div');
+                        rowElement.textContent = row.join(', ');
+                        dataElement.appendChild(rowElement);
+                    });
+                } else {
+                    document.getElementById('data').textContent = '無返回數據';
+                }
             })
             .catch(error => {
                 console.error('API 請求錯誤:', error);
