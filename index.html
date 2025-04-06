@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">程式碼複製工具 1.0.1</h1>
+        <h1 class="mt-5">程式碼複製工具 1.0.2</h1>
         <div id="buttons-container" class="my-3">
             <!-- 按鈕將動態生成 -->
         </div>
@@ -34,7 +34,11 @@
     const API_KEY = 'dd72c78b4f8fc2c92cfa80fc3b1e75e32a15c2c7';
     const SPREADSHEET_ID = '1ga9f117SjOxHvNQ9Cx9x1bwx-r3GRVa-ipDSOYjVDm8';
     const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}`;
-    
+    function addButton() {
+    document.getElementById('button-form').classList.remove('d-none'); // 移除表單的隱藏類
+    }
+        
+
     function addButtonData(name, code) {
         const values = [[name, code]];
         const body = {
@@ -43,17 +47,12 @@
         axios.post(`${BASE_URL}/values/'Sheet1'!A1:append?valueInputOption=USER_ENTERED&key=${API_KEY}`, body)
         .then(response => {
             console.log('Data added:', response);
-            // 此處可添加任何UI更新代碼
+            loadButtons();  // 重新加載按鈕列表
+            cancelEdit();   // 隱藏表單
         })
         .catch(error => console.error('Error adding data:', error));
     }
-    
-    document.getElementById('button-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const buttonName = document.getElementById('button-name').value;
-        const buttonCode = document.getElementById('button-code').value;
-        addButtonData(buttonName, buttonCode);
-    });
+
     
     function loadButtons() {
         axios.get(`${BASE_URL}/values/'Sheet1'!A:B?key=${API_KEY}`)
@@ -74,6 +73,13 @@
             alert('程式碼已複製!');
         });
     }
+
+    function cancelEdit() {
+        document.getElementById('button-form').classList.add('d-none');  // 隱藏表單
+        document.getElementById('button-name').value = '';  // 清空按鈕名稱欄位
+        document.getElementById('button-code').value = '';  // 清空程式碼欄位
+    }
+
     
     window.onload = loadButtons;
     </script>
