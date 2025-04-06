@@ -59,9 +59,10 @@
 
     
     function loadButtons() {
-        axios.get(`${BASE_URL}/values/'Sheet1'!A:B?key=${API_KEY}`)
+        axios.get(`${BASE_URL}/values/Sheet1!A:B?key=${API_KEY}`)
         .then(response => {
             const rows = response.data.values;
+            console.log('Loaded buttons:', rows);
             const buttonsContainer = document.getElementById('buttons-container');
             buttonsContainer.innerHTML = ''; // 清空現有按鈕
             rows.forEach((row, index) => {
@@ -69,8 +70,11 @@
                 buttonsContainer.innerHTML += buttonHtml;
             });
         })
-        .catch(error => console.error('Error loading buttons:', error));
+        .catch(error => {
+            console.error('Error loading buttons:', error);
+        });
     }
+
     
     function copyCode(code) {
         navigator.clipboard.writeText(code).then(() => {
