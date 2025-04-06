@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">程式碼複製工具 1.0.2</h1>
+        <h1 class="mt-5">程式碼複製工具 1.0.3</h1>
         <div id="buttons-container" class="my-3">
             <!-- 按鈕將動態生成 -->
         </div>
@@ -44,14 +44,18 @@
         const body = {
             values: values
         };
-        axios.post(`${BASE_URL}/values/'Sheet1'!A1:append?valueInputOption=USER_ENTERED&key=${API_KEY}`, body)
+        axios.post(`${BASE_URL}/values/Sheet1!A1:append?valueInputOption=USER_ENTERED&key=${API_KEY}`, body)
         .then(response => {
-            console.log('Data added:', response);
+            console.log('Data added:', response.data);
             loadButtons();  // 重新加載按鈕列表
             cancelEdit();   // 隱藏表單
         })
-        .catch(error => console.error('Error adding data:', error));
+        .catch(error => {
+            console.error('Error adding data:', error);
+            console.error('Error details:', error.response.data);
+        });
     }
+
 
     
     function loadButtons() {
