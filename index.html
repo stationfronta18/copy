@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>按鈕設定查看器</title>
+    <title>AMY的工具箱</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
@@ -12,6 +12,15 @@
         }
         h1 {
             color: #333;
+        }
+        a.edit-link {
+            display: block;
+            margin-bottom: 10px;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a.edit-link:hover {
+            text-decoration: underline;
         }
         #buttonsContainer {
             margin-top: 20px;
@@ -33,6 +42,7 @@
     </style>
 </head>
 <body>
+    <a href="https://docs.google.com/spreadsheets/d/1ga9f117SjOxHvNQ9Cx9x1bwx-r3GRVa-ipDSOYjVDm8/edit?gid=0#gid=0" class="edit-link" target="_blank">編輯按鈕</a>
     <h1>按鈕設定查看器</h1>
     <div id="buttonsContainer"></div>
 
@@ -64,9 +74,7 @@
             });
 
         function copyCode(code) {
-            navigator.clipboard.writeText(code).then(() => {
-                alert('程式碼已複製到剪貼板');
-            });
+            navigator.clipboard.writeText(code);
         }
     </script>
 </body>
