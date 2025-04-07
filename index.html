@@ -2,36 +2,71 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Google Sheets API 測試1.0.1</title>
+    <title>按鈕設定管理</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <h1>從 Google Sheets 讀取數據</h1>
-    <div id="data"></div>
+    <h1>按鈕設定管理</h1>
+    <button onclick="addButton()">新增按鈕</button>
+    <div id="buttonsContainer"></div>
 
     <script>
         const API_KEY = 'AIzaSyBF9oMJZ7TRjRpCxeQ8ardtg72fE4tq64E';
         const SPREADSHEET_ID = '1ga9f117SjOxHvNQ9Cx9x1bwx-r3GRVa-ipDSOYjVDm8';
-        const range = '工作表1!A1:C10';  // 這裡設定你要讀取的範圍
+        const range = '工作表1!A2:B';
 
-        axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
-            .then(response => {
-                const data = response.data.values;
-                const dataElement = document.getElementById('data');
-                if (data) {
-                    data.forEach(row => {
-                        const rowElement = document.createElement('div');
-                        rowElement.textContent = row.join(', ');
-                        dataElement.appendChild(rowElement);
+        function fetchData() {
+            axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
+                .then(response => {
+                    const data = response.data.values;
+                    const container = document.getElementById('buttonsContainer');
+                    container.innerHTML = '';  // 清除現有按鈕
+                    data.forEach((row, index) => {
+                        const buttonName = row[0];
+                        const buttonCode = row[1];
+                        const buttonElement = document.createElement('button');
+                        buttonElement.textContent = buttonName;
+                        buttonElement.onclick = () => copyCode(buttonCode);
+                        container.appendChild(buttonElement);
+
+                        const editButton = document.createElement('button');
+                        editButton.textContent = '編輯';
+                        editButton.onclick = () => editButtonData(index, buttonName, buttonCode);
+                        container.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = '刪除';
+                        deleteButton.onclick = () => deleteButtonData(index);
+                        container.appendChild(deleteButton);
                     });
-                } else {
-                    document.getElementById('data').textContent = '無返回數據';
-                }
-            })
-            .catch(error => {
-                console.error('API 請求錯誤:', error);
-                document.getElementById('data').textContent = '數據加載失敗';
+                })
+                .catch(error => {
+                    console.error('API 請求錯誤:', error);
+                });
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert('程式碼已複製');
             });
+        }
+
+        function addButton() {
+            // 這裡可以添加新增按鈕的邏輯
+            console.log('新增按鈕功能');
+        }
+
+        function editButtonData(index, buttonName, buttonCode) {
+            // 這裡可以添加編輯按鈕的邏輯
+            console.log('編輯按鈕功能', index, buttonName, buttonCode);
+        }
+
+        function deleteButtonData(index) {
+            // 這裡可以添加刪除按鈕的邏輯
+            console.log('刪除按鈕功能', index);
+        }
+
+        fetchData();  // 初始化加載數據
     </script>
 </body>
 </html>
